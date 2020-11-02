@@ -2,10 +2,8 @@
 <html>
 
 <head>
-    <title>Activities Pose Estimation</title>
-    <style>
-
-        @media only screen and (max-width: 600px) {
+    <title>Workout Pose Estimation</title>
+    <style>@media only screen and (max-width: 600px) {
 
             .footer-text,
             .dg {
@@ -56,27 +54,26 @@
 
         .spinner-text {
             float: left;
-        }
-    </style>
+        }</style>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
-    <div id="info" style='display:none'>
+    <div id="info" style="display:none">
     </div>
-    <div id="loading" style='display:flex'>
+    <div id="loading" style="display:flex">
         <div class="spinner-text">
             Loading PoseNet model...
         </div>
         <div class="sk-spinner sk-spinner-pulse"></div>
     </div>
-    <div id='main' style='display:none'>
-        <video id="video" playsinline style="display: none;">
+    <div id="main" style="display:none">
+        <video id="video" playsinline="" style="display: none;">
         </video>
-        <canvas id="output" />
-    </div>
+        <canvas id="output">
+    </canvas></div>
 
-    <script src="camera.js"></script>
+    <script src="/camera.283d5d54.js"></script>
 </body>
 
 </html>
