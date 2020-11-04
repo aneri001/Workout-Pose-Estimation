@@ -1,19 +1,4 @@
-/**
- * @license
- * Copyright 2019 Google LLC. All Rights Reserved
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * =============================================================================
- */
+
 import * as posenet from '@tensorflow-models/posenet';
 import * as tf from '@tensorflow/tfjs';
 
@@ -21,10 +6,10 @@ const color = 'chartreuse';
 const boundingBoxColor = 'darkGrey';
 const lineWidth = 2;
 var prev = 0;
-export const tryResNetButtonName = 'tryResNetButton';
-export const tryResNetButtonText = '[New] Try ResNet50';
- const tryResNetButtonTextCss = 'width:100%;text-decoration:underline;';
-const tryResNetButtonBackgroundCss = 'background:#e61d5f;';
+// export const tryResNetButtonName = 'tryResNetButton';
+// export const tryResNetButtonText = '[New] Try ResNet50';
+// const tryResNetButtonTextCss = 'width:100%;text-decoration:underline;';
+// const tryResNetButtonBackgroundCss = 'background:#e61d5f;';
 
 function isAndroid() {
   return /Android/i.test(navigator.userAgent);
@@ -111,9 +96,7 @@ export function drawSkeleton(keypoints, minConfidence, ctx, scale = 1) {
   });
 }
 
-/**
- * Draw pose keypoints onto a canvas
- */
+
 
 export function jumping_jack_calc(keypoints, minConfidence, ctx, wko_started){
   const right_ident = keypoints[10].score > minConfidence && keypoints[14].score > minConfidence && keypoints[16].score > minConfidence;
@@ -228,11 +211,6 @@ export function drawKeypoints(keypoints, minConfidence, ctx,
   
 }
 
-/**
- * Draw the bounding box of a pose. For example, for a whole person standing
- * in an image, the bounding box will begin at the nose and extend to one of
- * ankles
- */
 export function drawBoundingBox(keypoints, ctx) {
   const boundingBox = posenet.getBoundingBox(keypoints);
 
@@ -244,9 +222,7 @@ export function drawBoundingBox(keypoints, ctx) {
   ctx.stroke();
 }
 
-/**
- * Converts an arary of pixel data into an ImageData object
- */
+
 export async function renderToCanvas(a, ctx) {
   const [height, width] = a.shape;
   const imageData = new ImageData(width, height);
@@ -266,9 +242,7 @@ export async function renderToCanvas(a, ctx) {
   ctx.putImageData(imageData, 0, 0);
 }
 
-/**
- * Draw an image on a canvas
- */
+
 export function renderImageToCanvas(image, size, canvas) {
   canvas.width = size[0];
   canvas.height = size[1];
@@ -311,11 +285,7 @@ function drawPoints(ctx, points, radius, color, name) {
   }
 }
 
-/**
- * Draw offset vector values, one of the model outputs, on to the canvas
- * Read our blog post for a description of PoseNet's offset vector outputs
- * https://medium.com/tensorflow/real-time-human-pose-estimation-in-the-browser-with-tensorflow-js-7dd0bc881cd5
- */
+
 export function drawOffsetVectors(
     heatMapValues, offsets, outputStride, scale = 1, ctx) {
   const offsetPoints =

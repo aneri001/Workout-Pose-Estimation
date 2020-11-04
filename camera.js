@@ -1,27 +1,12 @@
-/**
- * @license
- * Copyright 2019 Google LLC. All Rights Reserved.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * =============================================================================
- */
+
 import * as posenet from '@tensorflow-models/posenet';
 import dat from 'dat.gui';
 import Stats from 'stats.js';
 
 import {drawBoundingBox, drawKeypoints, drawSkeleton, isMobile, toggleLoadingUI, global_zero} from './demo_util';
 
-const videoWidth = 600;
-const videoHeight = 500;
+const videoWidth = 800;
+const videoHeight = 850;
 var rep_count = 0;
 var wko_started = 0;
 var done = 0;
@@ -32,10 +17,7 @@ var act_dur = 0;
 var last_rep = 0;
 const stats = new Stats();
 
-/**
- * Loads a the camera to be used in the demo
- *
- */
+
 async function setupCamera() {
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
     throw new Error(
@@ -134,7 +116,7 @@ function setupGui(cameras, net) {
   // person to be in the frame or results will be innaccurate. Multi-pose works
   // for more than 1 person
   const algorithmController =
-      gui.add(guiState, 'algorithm', ['single-pose', 'multi-pose']);
+      gui.add(guiState, 'algorithm', ['pose']);
 
   // The input parameters have the most effect on accuracy and speed of the
   // network
@@ -160,11 +142,11 @@ function setupGui(cameras, net) {
   activity.add(obj,'add').name('Start Workout');
   activity.open();
 
-  let single = gui.addFolder('Single Pose Detection');
-  single.add(guiState.singlePoseDetection, 'minPoseConfidence', 0.0, 1.0);
-  single.add(guiState.singlePoseDetection, 'minPartConfidence', 0.0, 1.0);
+  // let single = gui.addFolder('Single Pose Detection');
+  // single.add(guiState.singlePoseDetection, 'minPoseConfidence', 0.0, 1.0);
+  // single.add(guiState.singlePoseDetection, 'minPartConfidence', 0.0, 1.0);
 
-  let multi = gui.addFolder('Multi Pose Detection');
+  let multi = gui.addFolder('Pose Detection');
   multi.add(guiState.multiPoseDetection, 'maxPoseDetections')
       .min(1)
       .max(20)
@@ -186,10 +168,10 @@ function setupGui(cameras, net) {
 
   algorithmController.onChange(function(value) {
     switch (guiState.algorithm) {
-      case 'single-pose':
-        multi.close();
-        single.open();
-        break;
+      // case 'single-pose':
+      //   multi.close();
+      //   single.open();
+      //   break;
       case 'multi-pose':
         single.close();
         multi.open();
@@ -198,18 +180,13 @@ function setupGui(cameras, net) {
   });
 }
 
-/**
- * Sets up a frames per second panel on the top-left of the window
- */
+
 function setupFPS() {
   stats.showPanel(0);  // 0: fps, 1: ms, 2: mb, 3+: custom
   document.getElementById('main').appendChild(stats.dom);
 }
 
-/**
- * Feeds an image to posenet to estimate poses - this is where the magic
- * happens. This function loops with a requestAnimationFrame method.
- */
+
 function detectPoseInRealTime(video, net) {
   const canvas = document.getElementById('output');
   const ctx = canvas.getContext('2d');
@@ -309,15 +286,15 @@ function detectPoseInRealTime(video, net) {
     let minPoseConfidence;
     let minPartConfidence;
     switch (guiState.algorithm) {
-      case 'single-pose':
-        const pose = await guiState.net.estimatePoses(video, {
-          flipHorizontal: flipPoseHorizontal,
-          decodingMethod: 'single-person'
-        });
-        poses = poses.concat(pose);
-        minPoseConfidence = +guiState.singlePoseDetection.minPoseConfidence;
-        minPartConfidence = +guiState.singlePoseDetection.minPartConfidence;
-        break;
+      // case 'single-pose':
+      //   const pose = await guiState.net.estimatePoses(video, {
+      //     flipHorizontal: flipPoseHorizontal,
+      //     decodingMethod: 'single-person'
+      //   });
+      //   poses = poses.concat(pose);
+      //   minPoseConfidence = +guiState.singlePoseDetection.minPoseConfidence;
+      //   minPartConfidence = +guiState.singlePoseDetection.minPartConfidence;
+      //   break;
       case 'multi-pose':
         let all_poses = await guiState.net.estimatePoses(video, {
           flipHorizontal: flipPoseHorizontal,
@@ -343,9 +320,6 @@ function detectPoseInRealTime(video, net) {
       ctx.restore();
     }
 
-    // For each pose (i.e. person) detected in an image, loop through the poses
-    // and draw the resulting skeleton and keypoints if over certain confidence
-    // scores
     poses.forEach(({score, keypoints}) => {
       if (score >= minPoseConfidence) {
         if (guiState.output.showPoints) {
@@ -443,10 +417,7 @@ function detectPoseInRealTime(video, net) {
   poseDetectionFrame();
 }
 
-/**
- * Kicks off the demo by loading the posenet model, finding and loading
- * available camera devices, and setting off the detectPoseInRealTime function.
- */
+
 export async function bindPage() {
   toggleLoadingUI(true);
   const net = await posenet.load({

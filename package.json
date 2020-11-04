@@ -1,13 +1,9 @@
 {
   "name": "posenet",
   "version": "0.0.1",
-  "author": "Hugo Zanini",
   "description": "Activities-Pose-Estimation",
   "main": "index.js",
-  "homepage": "https://github.com/hugozanini/Activities-Pose-Estimation#readme",
-  "bugs": {
-    "url": "https://github.com/hugozanini/Activities-Pose-Estimation/issues"
-  },
+  
   "license": "Apache-2.0",
   "private": true,
   "engines": {
