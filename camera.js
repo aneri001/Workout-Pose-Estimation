@@ -106,20 +106,11 @@ function setupGui(cameras, net) {
 
 
   let architectureController = null;
-  // guiState[tryResNetButtonName] = function() {
-  //   architectureController.setValue('ResNet50')
-  // };
-  //gui.add(guiState, tryResNetButtonName).name(tryResNetButtonText);
-  //updateTryResNetButtonDatGuiCss();
-
-  // The single-pose algorithm is faster and simpler but requires only one
-  // person to be in the frame or results will be innaccurate. Multi-pose works
-  // for more than 1 person
+  
   const algorithmController =
       gui.add(guiState, 'algorithm', ['pose']);
 
-  // The input parameters have the most effect on accuracy and speed of the
-  // network
+  
 
   let activityController = null;
 
@@ -153,8 +144,7 @@ function setupGui(cameras, net) {
       .step(1);
   multi.add(guiState.multiPoseDetection, 'minPoseConfidence', 0.0, 1.0);
   multi.add(guiState.multiPoseDetection, 'minPartConfidence', 0.0, 1.0);
-  // nms Radius: controls the minimum distance between poses that are returned
-  // defaults to 20, which is probably fine for most use cases
+  
   multi.add(guiState.multiPoseDetection, 'nmsRadius').min(0.0).max(40.0);
   multi.open();
 
@@ -168,10 +158,7 @@ function setupGui(cameras, net) {
 
   algorithmController.onChange(function(value) {
     switch (guiState.algorithm) {
-      // case 'single-pose':
-      //   multi.close();
-      //   single.open();
-      //   break;
+      
       case 'multi-pose':
         single.close();
         multi.open();
@@ -191,10 +178,7 @@ function detectPoseInRealTime(video, net) {
   const canvas = document.getElementById('output');
   const ctx = canvas.getContext('2d');
 
-  // since images are being fed from a webcam, we want to feed in the
-  // original image and then just flip the keypoints' x coordinates. If instead
-  // we flip the image, then correcting left-right keypoint pairs requires a
-  // permutation on all the keypoints.
+  
   const flipPoseHorizontal = true;
 
   canvas.width = videoWidth;
@@ -202,7 +186,7 @@ function detectPoseInRealTime(video, net) {
 
   async function poseDetectionFrame() {
     if (guiState.changeToArchitecture) {
-      // Important to purge variables and free up GPU memory
+      
       guiState.net.dispose();
       toggleLoadingUI(true);
       guiState.net = await posenet.load({
@@ -248,7 +232,7 @@ function detectPoseInRealTime(video, net) {
     }
 
     if (guiState.changeToInputResolution) {
-      // Important to purge variables and free up GPU memory
+    
       guiState.net.dispose();
       toggleLoadingUI(true);
       guiState.net = await posenet.load({
@@ -264,7 +248,7 @@ function detectPoseInRealTime(video, net) {
     }
 
     if (guiState.changeToQuantBytes) {
-      // Important to purge variables and free up GPU memory
+     
       guiState.net.dispose();
       toggleLoadingUI(true);
       guiState.net = await posenet.load({
@@ -279,22 +263,14 @@ function detectPoseInRealTime(video, net) {
       guiState.changeToQuantBytes = null;
     }
 
-    // Begin monitoring code for frames per second
+  
     stats.begin();
 
     let poses = [];
     let minPoseConfidence;
     let minPartConfidence;
     switch (guiState.algorithm) {
-      // case 'single-pose':
-      //   const pose = await guiState.net.estimatePoses(video, {
-      //     flipHorizontal: flipPoseHorizontal,
-      //     decodingMethod: 'single-person'
-      //   });
-      //   poses = poses.concat(pose);
-      //   minPoseConfidence = +guiState.singlePoseDetection.minPoseConfidence;
-      //   minPartConfidence = +guiState.singlePoseDetection.minPartConfidence;
-      //   break;
+     
       case 'multi-pose':
         let all_poses = await guiState.net.estimatePoses(video, {
           flipHorizontal: flipPoseHorizontal,
@@ -408,7 +384,7 @@ function detectPoseInRealTime(video, net) {
       }
     });
 
-    // End monitoring code for frames per second
+   
     stats.end();
 
     requestAnimationFrame(poseDetectionFrame);
@@ -448,5 +424,5 @@ export async function bindPage() {
 
 navigator.getUserMedia = navigator.getUserMedia ||
     navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-// kick off the demo
+
 bindPage();

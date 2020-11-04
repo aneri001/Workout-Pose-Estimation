@@ -6,10 +6,6 @@ const color = 'chartreuse';
 const boundingBoxColor = 'darkGrey';
 const lineWidth = 2;
 var prev = 0;
-// export const tryResNetButtonName = 'tryResNetButton';
-// export const tryResNetButtonText = '[New] Try ResNet50';
-// const tryResNetButtonTextCss = 'width:100%;text-decoration:underline;';
-// const tryResNetButtonBackgroundCss = 'background:#e61d5f;';
 
 function isAndroid() {
   return /Android/i.test(navigator.userAgent);
@@ -36,15 +32,7 @@ function setDatGuiPropertyCss(propertyText, liCssString, spanCssString = '') {
   }
 }
 
-// export function updateTryResNetButtonDatGuiCss() {
-//   setDatGuiPropertyCss(
-//       tryResNetButtonText, tryResNetButtonBackgroundCss,
-//       tryResNetButtonTextCss);
-// }
 
-/**
- * Toggles between the loading UI and the main canvas UI.
- */
 export function toggleLoadingUI(
     showLoadingUI, loadingDivId = 'loading', mainDivId = 'main') {
   if (showLoadingUI) {
@@ -69,9 +57,7 @@ export function drawPoint(ctx, y, x, r, color, name) {
   //ctx.fillText(name, x, y,);
 }
 
-/**
- * Draws a line on a canvas, i.e. a joint
- */
+
 export function drawSegment([ay, ax], [by, bx], color, scale, ctx) {
   ctx.beginPath();
   ctx.moveTo(ax * scale, ay * scale);
@@ -81,9 +67,7 @@ export function drawSegment([ay, ax], [by, bx], color, scale, ctx) {
   ctx.stroke();
 }
 
-/**
- * Draws a pose skeleton by looking up all adjacent keypoints/joints
- */
+
 export function drawSkeleton(keypoints, minConfidence, ctx, scale = 1) {
   //console.log(keypoints);
   const adjacentKeyPoints =
@@ -251,11 +235,7 @@ export function renderImageToCanvas(image, size, canvas) {
   ctx.drawImage(image, 0, 0);
 }
 
-/**
- * Draw heatmap values, one of the model outputs, on to the canvas
- * Read our blog post for a description of PoseNet's heatmap outputs
- * https://medium.com/tensorflow/real-time-human-pose-estimation-in-the-browser-with-tensorflow-js-7dd0bc881cd5
- */
+
 export function drawHeatMapValues(heatMapValues, outputStride, canvas) {
   const ctx = canvas.getContext('2d');
   const radius = 5;
@@ -264,10 +244,6 @@ export function drawHeatMapValues(heatMapValues, outputStride, canvas) {
   drawPoints(ctx, scaledValues, radius, color, name);
 }
 
-/**
- * Used by the drawHeatMapValues method to draw heatmap points on to
- * the canvas
- */
 function drawPoints(ctx, points, radius, color, name) {
   const data = points.buffer().values;
 
